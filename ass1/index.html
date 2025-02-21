@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login/Signup Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 400px;
+        margin: 50px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        color: #333;
+      }
+      input {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .error {
+        color: red;
+        font-size: 14px;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Login / Signup</h2>
+      <form id="authForm">
+        <input
+          type="text"
+          id="name"
+          placeholder="Full Name"
+          required
+          pattern="^[A-Za-z\s]+$"
+          title="Only alphabets and spaces are allowed"
+        />
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          required
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          title="Enter a valid email"
+        />
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+          minlength="6"
+          pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
+          title="Minimum 6 characters, at least one letter and one number"
+        />
+        <input
+          type="text"
+          id="phone"
+          placeholder="Phone Number"
+          required
+          pattern="^\d{10}$"
+          title="Enter a 10-digit phone number"
+          maxlength="10"
+        />
+        <input type="date" id="dob" placeholder="Date of Birth" required />
+        <button type="submit">Submit</button>
+      </form>
+      <p id="errorMsg" class="error"></p>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $("#authForm").submit(function (event) {
+          event.preventDefault();
+
+          const userData = {
+            name: $("#name").val(),
+            email: $("#email").val(),
+            password: $("#password").val(),
+            phone: $("#phone").val(),
+            dob: $("#dob").val(),
+          };
+
+          $.ajax({
+            url: "http://localhost:5000/signup",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(userData),
+            success: function (response) {
+              window.location.href = "./dashboard.html"; // Try redirecting directly
+            },
+
+            error: function (xhr) {
+              $("#errorMsg").text(
+                xhr.responseJSON.message || "An error occurred."
+              );
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
